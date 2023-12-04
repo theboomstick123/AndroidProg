@@ -60,6 +60,8 @@ class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setContentView(R.layout.activity_game)
+
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initBoard()
