@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/MainActivity">
+    <!-- res/navigation/nav_graph.xml -->
+
+    <!--here is the error, need buttons onclick listener on the
+     backend of mainactivity and profile interface-->
+        <fragment
+            android:id="@+id/MainActivity"
+            android:name="com.example.finalsproject.MainActivity"
+            android:label="First Fragment"
+            tools:layout="@layout/activity_main">
+            <!-- Specify any arguments or actions for this fragment -->
+            <action
+                android:id="@+id/action_StartFragment_to_ProfileFragment"
+                app:destination="@id/ProfileFragment" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/ProfileFragment"
+            android:name="com.example.finalsproject.ProfileInterface"
+            android:label="Second Fragment"
+            tools:layout="@layout/activity_profile_interface">
+            <!-- Specify any arguments or actions for this fragment -->
+            <action
+                android:id="@+id/action_ProfileFragment_to_StartFragment"
+                app:destination="@id/MainActivity" />
+        </fragment>
+
+        <!-- Add other fragments as needed -->
+
+        <action
+            android:id="@+id/action_first_to_second"
+            app:destination="@id/ProfileFragment" />
+
+</navigation>
