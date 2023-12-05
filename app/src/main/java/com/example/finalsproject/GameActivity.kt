@@ -17,8 +17,7 @@ class GameActivity : AppCompatActivity() {
     //Cell status map
     enum class CellStatus{
         EMPTY,
-        LOCKED,
-        UNLOCKED
+        LOCKED
     }
 
     //'firstTurn' represents the player who goes first, 'currentTurn' represents the current player.
@@ -50,6 +49,8 @@ class GameActivity : AppCompatActivity() {
     private var clearPowerUpActivated = false
     // Flag to indicate if the "Undo" power-up is activated
     private var undoPowerUpActivated = false
+    // Add this variable to your class
+    private var lastMoveUndone = false
 
     //Board Initialization:
 
@@ -144,6 +145,8 @@ class GameActivity : AppCompatActivity() {
         if(fullBoard()){
             result("Draw")
         }
+
+        markCellAsUnlocked()
     }
 
     //ADDING SYMBOL TO THE BOARD:
@@ -161,16 +164,19 @@ class GameActivity : AppCompatActivity() {
 
         // Check if the cell is marked as locked
         if (cellStatusMap[Pair(row, col)] == CellStatus.LOCKED) {
-            // Cell is locked, display a message or take appropriate action
-            AlertDialog.Builder(this)
-                .setTitle("Locked Cell")
-                .setMessage("You cannot place a symbol on this cell.")
-                .setPositiveButton("OK") { _, _ ->
-                    // Do nothing or provide additional actions as needed
-                }
-                .setCancelable(false)
-                .show()
-            return
+            // Cell is locked, and Undo power-up is not activated, display a message or take appropriate action
+            if (!undoPowerUpActivated){
+                // Cell is locked, and Undo power-up is not activated, display a message or take appropriate action
+                AlertDialog.Builder(this)
+                    .setTitle("Locked Cell")
+                    .setMessage("You cannot place a symbol on this cell.")
+                    .setPositiveButton("OK") { _, _ ->
+                        // Do nothing or provide additional actions as needed
+                    }
+                    .setCancelable(false)
+                    .show()
+                return
+            }
         }
 
         // Set the symbol (X or O) to the tapped button
@@ -183,13 +189,11 @@ class GameActivity : AppCompatActivity() {
             lastMoveByCross = Move(row, col, PlayerTurn.CROSS)
         }
 
-        // Unlock cells after the opponent's move
-        if (currentTurn == PlayerTurn.CROSS) {
-            markCellAsUnlocked()
-        }
-
         // Switch turn after placing the symbol
         switchTurn()
+
+        // Mark the cell as locked to prevent placing the same move again
+        markCellAsLocked(row, col, true)
     }
 
     private fun switchTurn() {
@@ -245,27 +249,37 @@ class GameActivity : AppCompatActivity() {
             // Clear the symbol in the selected cell
             val button = boardList[lastMove.row * 4 + lastMove.col]
 
-            // Update the status to EMPTY
-            button.text = ""
-            cellStatusMap[Pair(lastMove.row, lastMove.col)] = CellStatus.EMPTY
+            // Check if the cell is marked as locked
+            if (cellStatusMap[Pair(lastMove.row, lastMove.col)] == CellStatus.LOCKED) {
+                // Update the status to EMPTY
+                button.text = ""
+                cellStatusMap[Pair(lastMove.row, lastMove.col)] = CellStatus.EMPTY
 
-            // Mark the cell as locked to prevent placing the same move again
-            markCellAsLocked(lastMove.row, lastMove.col, false)
+                // Mark the cell as locked to prevent placing the same move again
+                markCellAsLocked(lastMove.row, lastMove.col, true)
 
-            // Print statements for debugging
-            println("UndoPowerUp Last Move: $lastMove")
-            println("UndoPowerUp Updated Board:")
-            printBoardState()
+                // Print statements for debugging
+                println("UndoPowerUp Last Move: $lastMove")
+                println("UndoPowerUp Updated Board:")
+                printBoardState()
 
-            // Move switchTurn to the end of undoPowerUp to allow the opponent to make a move
+                // Move switchTurn to the end of undoPowerUp to allow the opponent to make a move
+            } else {
+                // The cell was not locked, handle this case as needed
+                println("UndoPowerUp: Attempted to undo an unlocked cell.")
+            }
+
+            // Set the flag to indicate that the Undo power-up is inactive
+            undoPowerUpActivated = false
+
+            // Set the flag to indicate that the last move was undone
+            lastMoveUndone = true
+
+            // Switch turn after processing the undo
             switchTurn()
-
         } else {
             println("UndoPowerUp Last Move is null.")
         }
-
-        // Set the flag to indicate that the Undo power-up is inactivate
-        undoPowerUpActivated = false
     }
 
     private fun printBoardState() {
@@ -287,12 +301,20 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun markCellAsUnlocked() {
-        // Iterate over all cells and unlock only those that are marked as locked
+        // Iterate over all cells and unlock only those that were marked as locked
         for ((row, col) in cellStatusMap.keys) {
             if (cellStatusMap[Pair(row, col)] == CellStatus.LOCKED) {
-                cellStatusMap[Pair(row, col)] = CellStatus.UNLOCKED
+                // Check if the cell was part of the last move undone
+                val lastMove = if (currentTurn == PlayerTurn.NOUGHT) lastMoveByCross else lastMoveByNought
+                if (lastMove?.let { it.row != row || it.col != col } == true && !lastMoveUndone) {
+                    // Unlock the cell only if it is not the last move made by the current player
+                    // and if the opponent has made a move on a different cell
+                    cellStatusMap[Pair(row, col)] = CellStatus.EMPTY
+                }
             }
         }
+        // Reset the flag after processing
+        lastMoveUndone = false
     }
 
     private fun onClearPowerUpButtonClick() {
@@ -440,7 +462,7 @@ class GameActivity : AppCompatActivity() {
         return false
     }
 
-    private fun match(button: Button, symbol: String) = button.text == symbol
+    private fun match(button: Button, symbol: String) = button.text.toString() == symbol
 
     //FULL BOARD CHECK:
 
