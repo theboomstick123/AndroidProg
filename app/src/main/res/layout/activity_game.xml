@@ -43,30 +43,34 @@
             <View style="@style/verticalLine"
                 android:background="@drawable/columnyellow"/>
 
-            <Button
+            <ImageView
                 android:id="@+id/a1"
-                style="@style/column" />
+                style="@style/column"
+                android:src="@drawable/blankcell"/>
 
             <View style="@style/verticalLine"
                 android:background="@drawable/columnyellow"/>
 
-            <Button
+            <ImageView
                 android:id="@+id/b1"
-                style="@style/column" />
+                style="@style/column"
+                android:src="@drawable/blankcell"/>
 
             <View style="@style/verticalLine"
                 android:background="@drawable/columnyellow"/>
 
-            <Button
+            <ImageView
                 android:id="@+id/c1"
-                style="@style/column" />
+                style="@style/column"
+                android:src="@drawable/blankcell"/>
 
             <View style="@style/verticalLine"
                 android:background="@drawable/columnyellow"/>
 
-            <Button
+            <ImageView
                 android:id="@+id/d1"
-                style="@style/column" />
+                style="@style/column"
+                android:src="@drawable/blankcell"/>
 
             <View style="@style/verticalLine"
                 android:background="@drawable/columnyellow"/>
@@ -81,30 +85,34 @@
             <View style="@style/verticalLine"
                 android:background="@drawable/columnyellow"/>
 
-            <Button
+            <ImageView
                 android:id="@+id/a2"
-                style="@style/column" />
+                style="@style/column"
+                android:src="@drawable/blankcell"/>
 
             <View style="@style/verticalLine"
                 android:background="@drawable/columnyellow"/>
 
-            <Button
+            <ImageView
                 android:id="@+id/b2"
-                style="@style/column" />
+                style="@style/column"
+                android:src="@drawable/blankcell"/>
 
             <View style="@style/verticalLine"
                 android:background="@drawable/columnyellow"/>
 
-            <Button
+            <ImageView
                 android:id="@+id/c2"
-                style="@style/column" />
+                style="@style/column"
+                android:src="@drawable/blankcell"/>
 
             <View style="@style/verticalLine"
                 android:background="@drawable/columnyellow"/>
 
-            <Button
+            <ImageView
                 android:id="@+id/d2"
-                style="@style/column" />
+                style="@style/column"
+                android:src="@drawable/blankcell"/>
 
             <View style="@style/verticalLine"
                 android:background="@drawable/columnyellow"/>
@@ -119,30 +127,34 @@
             <View style="@style/verticalLine"
                 android:background="@drawable/columnyellow"/>
 
-            <Button
+            <ImageView
                 android:id="@+id/a3"
-                style="@style/column" />
+                style="@style/column"
+                android:src="@drawable/blankcell"/>
 
             <View style="@style/verticalLine"
                 android:background="@drawable/columnyellow"/>
 
-            <Button
+            <ImageView
                 android:id="@+id/b3"
-                style="@style/column" />
+                style="@style/column"
+                android:src="@drawable/blankcell"/>
 
             <View style="@style/verticalLine"
                 android:background="@drawable/columnyellow"/>
 
-            <Button
+            <ImageView
                 android:id="@+id/c3"
-                style="@style/column" />
+                style="@style/column"
+                android:src="@drawable/blankcell"/>
 
             <View style="@style/verticalLine"
                 android:background="@drawable/columnyellow"/>
 
-            <Button
+            <ImageView
                 android:id="@+id/d3"
-                style="@style/column" />
+                style="@style/column"
+                android:src="@drawable/blankcell"/>
 
             <View style="@style/verticalLine"
                 android:background="@drawable/columnyellow"/>
@@ -157,30 +169,34 @@
             <View style="@style/verticalLine"
                 android:background="@drawable/columnyellow"/>
 
-            <Button
+            <ImageView
                 android:id="@+id/a4"
-                style="@style/column" />
+                style="@style/column"
+                android:src="@drawable/blankcell"/>
 
             <View style="@style/verticalLine"
                 android:background="@drawable/columnyellow"/>
 
-            <Button
+            <ImageView
                 android:id="@+id/b4"
-                style="@style/column" />
+                style="@style/column"
+                android:src="@drawable/blankcell"/>
 
             <View style="@style/verticalLine"
                 android:background="@drawable/columnyellow"/>
 
-            <Button
+            <ImageView
                 android:id="@+id/c4"
-                style="@style/column" />
+                style="@style/column"
+                android:src="@drawable/blankcell"/>
 
             <View style="@style/verticalLine"
                 android:background="@drawable/columnyellow"/>
 
-            <Button
+            <ImageView
                 android:id="@+id/d4"
-                style="@style/column" />
+                style="@style/column"
+                android:src="@drawable/blankcell"/>
 
             <View style="@style/verticalLine"
                 android:background="@drawable/columnyellow"/>
@@ -197,7 +213,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="55dp"
-        android:background="@drawable/brodercolor"
+        android:background="@drawable/ic_blank"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageButton2"
         app:layout_constraintHorizontal_bias="0.5"
@@ -212,7 +228,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="103dp"
         android:layout_marginBottom="96dp"
-        android:background="@drawable/brodercolor"
+        android:background="@drawable/ic_blank"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageButton3"
         app:layout_constraintHorizontal_bias="0.5"
@@ -225,7 +241,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="55dp"
-        android:background="@drawable/brodercolor"
+        android:background="@drawable/ic_blank"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

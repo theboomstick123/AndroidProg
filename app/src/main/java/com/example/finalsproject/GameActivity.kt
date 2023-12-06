@@ -1,8 +1,7 @@
 package com.example.finalsproject
 
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.finalsproject.databinding.ActivityGameBinding
@@ -52,11 +51,6 @@ class GameActivity : AppCompatActivity() {
     // Add this variable to your class
     private var lastMoveUndone = false
 
-    //Board Initialization:
-
-    //'boardList' is a list of buttons representing the Tic-Tac-Toe game board.
-    private var boardList = mutableListOf<Button>()
-
     private lateinit var binding : ActivityGameBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +77,11 @@ class GameActivity : AppCompatActivity() {
         const val CROSS = "X"
     }
 
+    //Board Initialization:
+
+    //'boardList' is a list of buttons representing the Tic-Tac-Toe game board.
+    private var boardList = mutableListOf<ImageView>()
+
     //'initBoard()' initializes this list with references to the buttons in your layout.
     private fun initBoard() {
         // Initializing the list of buttons representing the game board
@@ -108,17 +107,22 @@ class GameActivity : AppCompatActivity() {
 
     }
 
+    private fun isCellEmpty(imageView: ImageView): Boolean {
+        // Check if the tag of the ImageView is empty
+        return imageView.tag == ""
+    }
+
     //BOARD TAPPING EVENT
 
     //This function is triggered when a button on the game board is tapped.
-    fun boardTapped(view: View){
-        if(view !is Button)
+    fun boardTapped(imageView: ImageView){
+        if (!isCellEmpty(imageView))
             return
 
         // Check if the "Clear" power-up is activated
         if (clearPowerUpActivated) {
             // Process "Clear" power-up logic
-            clearPowerUp(view)
+            clearPowerUp(imageView)
 
             // Continue with the regular gameplay
             continueRegularGameplay()
@@ -130,13 +134,13 @@ class GameActivity : AppCompatActivity() {
 
         //Regular gameplay logic
         //'addToBoard(view)' adds the current player's symbol to the tapped button.
-        addToBoard(view)
+        addToBoard(imageView)
 
         //'checkPlayerVictory()' is called to check if the current player has won.
         if(checkPlayerVictory()) {
-            if (match(view, NOUGHT)) {
+            if (match(imageView, NOUGHT)) {
                 result("Nought Wins!")
-            } else if (match(view, CROSS)) {
+            } else if (match(imageView, CROSS)) {
                 result("Cross Wins!")
             }
         }
@@ -153,14 +157,14 @@ class GameActivity : AppCompatActivity() {
 
     //This function adds the current player's symbol to the tapped button if it's empty.
     //It also switches the turn to the next player.
-    private fun addToBoard(button: Button) {
-        if(button.text != "") {
+    private fun addToBoard(imageView: ImageView) {
+        if(imageView.drawable != null) {
             // Cell already occupied, do nothing
             return
         }
 
-        val row = boardList.indexOf(button) / 4
-        val col = boardList.indexOf(button) % 4
+        val row = boardList.indexOf(imageView) / 4
+        val col = boardList.indexOf(imageView) % 4
 
         // Check if the cell is marked as locked
         if (cellStatusMap[Pair(row, col)] == CellStatus.LOCKED) {
@@ -179,8 +183,8 @@ class GameActivity : AppCompatActivity() {
             }
         }
 
-        // Set the symbol (X or O) to the tapped button
-        button.text = if (currentTurn == PlayerTurn.NOUGHT) NOUGHT else CROSS
+        // Set the drawable (X or O) to the tapped ImageView
+        imageView.setImageResource(if (currentTurn == PlayerTurn.NOUGHT) R.drawable.selectcircle else R.drawable.selectcross)
 
         // Update the last move for the current player
         if (currentTurn == PlayerTurn.NOUGHT) {
@@ -247,12 +251,12 @@ class GameActivity : AppCompatActivity() {
 
         if (lastMove != null) {
             // Clear the symbol in the selected cell
-            val button = boardList[lastMove.row * 4 + lastMove.col]
+            val imageView = boardList[lastMove.row * 4 + lastMove.col]
 
             // Check if the cell is marked as locked
             if (cellStatusMap[Pair(lastMove.row, lastMove.col)] == CellStatus.LOCKED) {
                 // Update the status to EMPTY
-                button.text = ""
+                imageView.setImageResource(0)
                 cellStatusMap[Pair(lastMove.row, lastMove.col)] = CellStatus.EMPTY
 
                 // Mark the cell as locked to prevent placing the same move again
@@ -286,7 +290,7 @@ class GameActivity : AppCompatActivity() {
         // Helper function to print the current state of the board for debugging
         for (i in 0 until 4) {
             for (j in 0 until 4) {
-                print("${boardList[i * 4 + j].text} ")
+                print("${boardList[i * 4 + j].drawable != null} ")
             }
             println()
         }
@@ -296,25 +300,26 @@ class GameActivity : AppCompatActivity() {
     private data class Move(val row: Int, val col: Int, val player: PlayerTurn)
 
     private fun markCellAsLocked(row: Int, col: Int, lock: Boolean) {
-        // Implement logic to mark the cell as locked / unlocked
+        // Implement logic to mark the cell as locked / unlocked for the specific player
         cellStatusMap[Pair(row, col)] = if (lock) CellStatus.LOCKED else CellStatus.EMPTY
     }
 
     private fun markCellAsUnlocked() {
-        // Iterate over all cells and unlock only those that were marked as locked
+        // Iterate over all cells and unlock only those that were marked as locked by the current player
         for ((row, col) in cellStatusMap.keys) {
-            if (cellStatusMap[Pair(row, col)] == CellStatus.LOCKED) {
-                // Check if the cell was part of the last move undone
-                val lastMove = if (currentTurn == PlayerTurn.NOUGHT) lastMoveByCross else lastMoveByNought
-                if (lastMove?.let { it.row != row || it.col != col } == true && !lastMoveUndone) {
-                    // Unlock the cell only if it is not the last move made by the current player
-                    // and if the opponent has made a move on a different cell
-                    cellStatusMap[Pair(row, col)] = CellStatus.EMPTY
-                }
+            if (cellStatusMap[Pair(row, col)] == CellStatus.LOCKED && isCellLockedByCurrentPlayer(row, col)) {
+                // Unlock the cell only if it was marked as locked by the current player
+                cellStatusMap[Pair(row, col)] = CellStatus.EMPTY
             }
         }
         // Reset the flag after processing
         lastMoveUndone = false
+    }
+
+    private fun isCellLockedByCurrentPlayer(row: Int, col: Int): Boolean {
+        // Check if the cell was locked by the current player based on the last move undone
+        val lastMove = if (currentTurn == PlayerTurn.NOUGHT) lastMoveByCross else lastMoveByNought
+        return lastMove?.let { it.row == row && it.col == col } == true && !lastMoveUndone
     }
 
     private fun onClearPowerUpButtonClick() {
@@ -354,7 +359,7 @@ class GameActivity : AppCompatActivity() {
         return clearPowerUpUsedMap[currentTurn]!!
     }
 
-    private fun clearPowerUp(selectedCell: Button) {
+    private fun clearPowerUp(selectedCell: ImageView) {
         // Find the row and column of the selected cell
         val row = boardList.indexOf(selectedCell) / 4
         val col = boardList.indexOf(selectedCell) % 4
@@ -362,15 +367,16 @@ class GameActivity : AppCompatActivity() {
         // Clear the selected cell and its adjacent tiles
         for (i in row - 1..row + 1) {
             if (i in 0 until 4) {
-                val buttonInRow = boardList[i * 4 + col]
-                buttonInRow.text = ""
+                val imageViewInRow  = boardList[i * 4 + col]
+                imageViewInRow.setImageResource(0)
             }
         }
 
         for (j in col - 1..col + 1) {
             if (j in 0 until 4 && j != col) {
-                val buttonInCol = boardList[row * 4 + j]
-                buttonInCol.text = ""
+                val imageViewInCol = boardList[row * 4 + j]
+                imageViewInCol.setImageResource(0)
+
             }
         }
     }
@@ -411,7 +417,7 @@ class GameActivity : AppCompatActivity() {
         // Fill the 2D array with the current state of the buttons
         for (i in 0 until 4) {
             for (j in 0 until 4) {
-                board[i][j] = boardList[i * 4 + j].text.toString()
+                board[i][j] = if (boardList[i * 4 + j].drawable != null) "O" else ""
             }
         }
 
@@ -462,15 +468,17 @@ class GameActivity : AppCompatActivity() {
         return false
     }
 
-    private fun match(button: Button, symbol: String) = button.text.toString() == symbol
-
+    private fun match(imageView: ImageView, symbol: String): Boolean {
+        // Assuming you have set the tag for the ImageView to the corresponding symbol (CROSS or NOUGHT)
+        return imageView.tag == symbol
+    }
     //FULL BOARD CHECK:
 
     //This function checks if the game board is full, indicating a draw.
     private fun fullBoard(): Boolean {
         // Checking if any button is empty
-        for(button in boardList){
-            if(button.text == "")
+        for(imageView in boardList){
+            if(imageView.drawable == null)
                 return false
         }
         // If no empty button is found, the board is full
@@ -513,8 +521,8 @@ class GameActivity : AppCompatActivity() {
     //It also switches the first turn for the next game and sets the current turn to the first turn.
     private fun resetBoard() {
         // Clearing the text of all buttons on the board
-        for(button in boardList){
-            button.text = ""
+        for(imageView in boardList){
+            imageView.setImageResource(0) // Set to 0 to clear the image
         }
 
         //Clear cell stats for both players
