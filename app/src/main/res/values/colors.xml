@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="violet">#AC3EEF</color>
+    <color name="NeonC"><![CDATA[#00A8A8
+                        #33E9C6
+                        #33E9E9]]></color>
+
 </resources>
