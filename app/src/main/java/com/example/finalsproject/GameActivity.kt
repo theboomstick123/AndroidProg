@@ -158,10 +158,10 @@ class GameActivity : AppCompatActivity() {
         addToBoard(imageView)
 
         //'checkPlayerVictory()' is called to check if the current player has won.
-        if(checkPlayerVictory()) {
-            if (match(imageView, NOUGHT)) {
+        if (checkPlayerVictory()) {
+            if (imageView.tag == NOUGHT) {
                 result("Nought Wins!")
-            } else if (match(imageView, CROSS)) {
+            } else if (imageView.tag == CROSS) {
                 result("Cross Wins!")
             }
         }
@@ -206,6 +206,9 @@ class GameActivity : AppCompatActivity() {
 
         // Set the drawable (X or O) to the tapped ImageView
         imageView.setImageResource(if (currentTurn == PlayerTurn.NOUGHT) R.drawable.selectcircle else R.drawable.selectcross)
+
+        // Set the tag to the corresponding symbol
+        imageView.tag = if (currentTurn == PlayerTurn.NOUGHT) NOUGHT else CROSS
 
         // Update the background to remove the blank cell appearance
         imageView.setBackgroundResource(0)
@@ -441,7 +444,8 @@ class GameActivity : AppCompatActivity() {
         // Fill the 2D array with the current state of the buttons
         for (i in 0 until 4) {
             for (j in 0 until 4) {
-                board[i][j] = if (boardList[i * 4 + j].drawable != null) "O" else ""
+                // Check if the ImageView has a tag and set the tag as the value in the board array
+                board[i][j] = boardList[i * 4 + j].tag as String? ?: ""
             }
         }
 
@@ -452,50 +456,49 @@ class GameActivity : AppCompatActivity() {
         for (symbol in symbolsToCheck) {
             // Check rows
             for (i in 0 until 4) {
-                if ((0 until 3).all { match(boardList[i * 4 + it], symbol) } || // Check row
-                    (1 until 4).all { match(boardList[i * 4 + it], symbol) }) {
+                if ((0 until 3).all { match(board[i][it], symbol) } || // Check row
+                    (1 until 4).all { match(board[i][it], symbol) }) {
                     return true
                 }
             }
 
             // Check columns
             for (i in 0 until 4) {
-                if ((0 until 3).all { match(boardList[it * 4 + i], symbol) } || // Check column
-                    (1 until 4).all { match(boardList[it * 4 + i], symbol) }) {
+                if ((0 until 3).all { match(board[it][i], symbol) } || // Check column
+                    (1 until 4).all { match(board[it][i], symbol) }) {
                     return true
                 }
             }
 
             // Check main diagonal
-            if ((0 until 3).all { match(boardList[it * 4 + it], symbol) } ||   // Check main diagonal
-                (1 until 4).all { match(boardList[it * 4 + it], symbol) }) {
+            if ((0 until 3).all { match(board[it][it], symbol) } ||   // Check main diagonal
+                (1 until 4).all { match(board[it][it], symbol) }) {
                 return true
             }
 
             // Check anti-diagonal
-            if ((0 until 3).all { match(boardList[it * 4 + (3 - it)], symbol) } || // Check anti-diagonal
-                (1 until 4).all { match(boardList[it * 4 + (3 - it)], symbol) }) {
+            if ((0 until 3).all { match(board[it][3 - it], symbol) } || // Check anti-diagonal
+                (1 until 4).all { match(board[it][3 - it], symbol) }) {
                 return true
             }
 
             // Check additional diagonals
-            if ((0 until 3).all { match(boardList[it * 4 + (it + 1)], symbol) } ||  // Check diagonal {(0,1), (1,2), (2,3)}
-                (0 until 3).all { match(boardList[it * 4 + (2 - it)], symbol) } ||  // Check diagonal {(0,2), (1,1), (2,0)}
-                (1 until 4).all { match(boardList[it * 4 + (it - 1)], symbol) } ||  // Check diagonal {(1,0), (2,1), (3,2)}
-                (1 until 4).all { match(boardList[it * 4 + (4 - it)], symbol) }) {  // Check diagonal {(1,3), (2,2), (3,1)}
+            if ((0 until 3).all { match(board[it][it + 1], symbol) } ||  // Check diagonal {(0,1), (1,2), (2,3)}
+                (0 until 3).all { match(board[it][2 - it], symbol) } ||  // Check diagonal {(0,2), (1,1), (2,0)}
+                (1 until 4).all { match(board[it][it - 1], symbol) } ||  // Check diagonal {(1,0), (2,1), (3,2)}
+                (1 until 4).all { match(board[it][4 - it], symbol) }) {  // Check diagonal {(1,3), (2,2), (3,1)}
                 return true
             }
-
         }
 
         // If no victory is found, return false
         return false
     }
 
-    private fun match(imageView: ImageView, symbol: String): Boolean {
-        // Assuming you have set the tag for the ImageView to the corresponding symbol (CROSS or NOUGHT)
-        return imageView.tag == symbol
+    private fun match(cellValue: String, symbol: String): Boolean {
+        return cellValue == symbol
     }
+
     //FULL BOARD CHECK:
 
     //This function checks if the game board is full, indicating a draw.
@@ -548,6 +551,8 @@ class GameActivity : AppCompatActivity() {
         for(imageView in boardList){
             // Clear the image resource
             imageView.setImageDrawable(null)
+            // Clear all tags
+            imageView.tag = ""
             // Set the background to the blank cell
             imageView.setBackgroundResource(R.drawable.blankcell)
         }
