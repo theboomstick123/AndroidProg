@@ -22,6 +22,19 @@
         app:srcCompat="@drawable/backing" />
 
     <ImageButton
+        android:id="@+id/imgbtnNEW"
+        android:layout_width="108dp"
+        android:layout_height="52dp"
+        android:background="@drawable/tictactoeneonv"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.567"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023"
+        app:srcCompat="@drawable/newprofile" />
+
+    <ImageButton
         android:id="@+id/imgbtnDOTs"
         android:layout_width="108dp"
         android:layout_height="52dp"
@@ -79,7 +92,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.933"
+        app:layout_constraintVertical_bias="0.991"
         app:srcCompat="@drawable/cleardata" />
 
     <TextView
@@ -145,5 +158,69 @@
         app:layout_constraintStart_toStartOf="@+id/imgVProf1"
         app:layout_constraintTop_toTopOf="@+id/imgVProf1"
         app:layout_constraintVertical_bias="0.718" />
+
+    <TextView
+        android:id="@+id/txtprofile2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:shadowColor="@color/white"
+        android:text="[Profile Name2]"
+        android:textColor="@color/cyan"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imgVProf2"
+        app:layout_constraintEnd_toEndOf="@+id/imgVProf2"
+        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintStart_toStartOf="@+id/imgVProf2"
+        app:layout_constraintTop_toTopOf="@+id/imgVProf2"
+        app:layout_constraintVertical_bias="0.213" />
+
+    <TextView
+        android:id="@+id/txtwinrate2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:shadowColor="@color/white"
+        android:text="[Win Rate2]"
+        android:textColor="@color/cyan"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imgVProf2"
+        app:layout_constraintEnd_toEndOf="@+id/imgVProf2"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="@+id/imgVProf2"
+        app:layout_constraintTop_toTopOf="@+id/imgVProf2"
+        app:layout_constraintVertical_bias="0.39" />
+
+    <TextView
+        android:id="@+id/txttotalmatches2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:shadowColor="@color/white"
+        android:text="[Total Matches2]"
+        android:textColor="@color/cyan"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imgVProf2"
+        app:layout_constraintEnd_toEndOf="@+id/imgVProf2"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="@+id/imgVProf2"
+        app:layout_constraintTop_toTopOf="@+id/imgVProf2"
+        app:layout_constraintVertical_bias="0.559" />
+
+    <TextView
+        android:id="@+id/txtrank2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:shadowColor="@color/white"
+        android:text="[Rank2]"
+        android:textColor="@color/cyan"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imgVProf2"
+        app:layout_constraintEnd_toEndOf="@+id/imgVProf2"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="@+id/imgVProf2"
+        app:layout_constraintTop_toTopOf="@+id/imgVProf2"
+        app:layout_constraintVertical_bias="0.736" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
