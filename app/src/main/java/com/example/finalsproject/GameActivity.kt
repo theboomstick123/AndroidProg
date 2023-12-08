@@ -137,9 +137,6 @@ class GameActivity : AppCompatActivity() {
     fun boardTapped(imageView: ImageView){
         Log.d("BoardTapped", "Board tapped!")
 
-        if (!isCellEmpty(imageView))
-            return
-
         // Check if the "Clear" power-up is activated
         if (clearPowerUpActivated) {
             // Process "Clear" power-up logic
@@ -152,6 +149,9 @@ class GameActivity : AppCompatActivity() {
             clearPowerUpActivated = false
             return
         }
+
+        if (!isCellEmpty(imageView))
+            return
 
         //Regular gameplay logic
         //'addToBoard(view)' adds the current player's symbol to the tapped button.
@@ -394,20 +394,27 @@ class GameActivity : AppCompatActivity() {
         // Clear the selected cell and its adjacent tiles
         for (i in row - 1..row + 1) {
             if (i in 0 until 4) {
-                val imageViewInRow  = boardList[i * 4 + col]
-                imageViewInRow.setImageResource(0)
+                clearCellAt(i, col)
             }
         }
 
         for (j in col - 1..col + 1) {
             if (j in 0 until 4 && j != col) {
-                val imageViewInCol = boardList[row * 4 + j]
-                imageViewInCol.setImageResource(0)
-
+                clearCellAt(row, j)
             }
         }
     }
 
+    private fun clearCellAt(row: Int, col: Int) {
+        // Clear the cell based on its position
+        val imageView = boardList[row * 4 + col]
+        // Clear the image resource
+        imageView.setImageDrawable(null)
+        // Clear all tags
+        imageView.tag = ""
+        // Set the background to the blank cell
+        imageView.setBackgroundResource(R.drawable.blankcell)
+    }
 
     private fun refreshPowerUpUsage() {
         // Refresh power-up usage
@@ -505,7 +512,7 @@ class GameActivity : AppCompatActivity() {
     private fun fullBoard(): Boolean {
         // Checking if any button is empty
         for(imageView in boardList){
-            if(imageView.drawable == null)
+            if(imageView.tag == null || imageView.tag == "")
                 return false
         }
         // If no empty button is found, the board is full
