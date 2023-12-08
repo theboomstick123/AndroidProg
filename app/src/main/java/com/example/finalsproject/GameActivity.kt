@@ -1,6 +1,7 @@
 package com.example.finalsproject
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -57,9 +58,16 @@ class GameActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_game)
 
+        // Set content view using View Binding
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Log to check if binding is initialized
+        Log.d("GameActivity", "Binding initialized: ${::binding.isInitialized}")
+
+        // Initialize the game board
         initBoard()
+        Log.d("GameActivity", "initBoard() called")
 
         // Set click listener for the "Clear" power-up button
         binding.imageButton1.setOnClickListener {
@@ -84,6 +92,8 @@ class GameActivity : AppCompatActivity() {
 
     //'initBoard()' initializes this list with references to the buttons in your layout.
     private fun initBoard() {
+        Log.d("GameActivity", "initBoard() called")
+
         // Initializing the list of buttons representing the game board
         boardList.add(binding.a1)
         boardList.add(binding.a2)
@@ -105,6 +115,15 @@ class GameActivity : AppCompatActivity() {
         boardList.add(binding.d3)
         boardList.add(binding.d4)
 
+        // Set click listeners for the ImageViews in the grid
+        for (imageView in boardList) {
+            imageView.setBackgroundResource(R.drawable.blankcell)
+            imageView.tag = "" // Ensure the tag is set to an empty string
+            imageView.setOnClickListener {
+                boardTapped(imageView)
+            }
+        }
+
     }
 
     private fun isCellEmpty(imageView: ImageView): Boolean {
@@ -116,6 +135,8 @@ class GameActivity : AppCompatActivity() {
 
     //This function is triggered when a button on the game board is tapped.
     fun boardTapped(imageView: ImageView){
+        Log.d("BoardTapped", "Board tapped!")
+
         if (!isCellEmpty(imageView))
             return
 
@@ -185,6 +206,9 @@ class GameActivity : AppCompatActivity() {
 
         // Set the drawable (X or O) to the tapped ImageView
         imageView.setImageResource(if (currentTurn == PlayerTurn.NOUGHT) R.drawable.selectcircle else R.drawable.selectcross)
+
+        // Update the background to remove the blank cell appearance
+        imageView.setBackgroundResource(0)
 
         // Update the last move for the current player
         if (currentTurn == PlayerTurn.NOUGHT) {
@@ -520,9 +544,12 @@ class GameActivity : AppCompatActivity() {
     //This function resets the game board by clearing the text of all buttons.
     //It also switches the first turn for the next game and sets the current turn to the first turn.
     private fun resetBoard() {
-        // Clearing the text of all buttons on the board
+        // Resetting the images of all ImageViews on the board
         for(imageView in boardList){
-            imageView.setImageResource(0) // Set to 0 to clear the image
+            // Clear the image resource
+            imageView.setImageDrawable(null)
+            // Set the background to the blank cell
+            imageView.setBackgroundResource(R.drawable.blankcell)
         }
 
         //Clear cell stats for both players
