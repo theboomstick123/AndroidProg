@@ -7,19 +7,63 @@
     tools:context=".VictoryActivity"
     android:background="@color/black">
 
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="235dp"
-        android:layout_height="69dp"
-        android:background="@drawable/brodercolor"
-        android:text="X/O WINS"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="50dp"
+    <ImageButton
+        android:id="@+id/OWView"
+        android:layout_width="291dp"
+        android:layout_height="111dp"
+        android:background="@drawable/tictactoeneonx"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.063" />
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/owins" />
+
+    <ImageView
+        android:id="@+id/winningProf"
+        android:layout_width="384dp"
+        android:layout_height="303dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.481"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.137"
+        app:srcCompat="@drawable/profilebackground" />
+
+    <ImageView
+        android:id="@+id/losingProf"
+        android:layout_width="384dp"
+        android:layout_height="303dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.481"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.633"
+        app:srcCompat="@drawable/profilebackground" />
+
+    <ImageButton
+        android:id="@+id/backBtn"
+        android:layout_width="197dp"
+        android:layout_height="87dp"
+        android:background="@drawable/tictactoeneonv"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/back" />
+
+    <ImageButton
+        android:id="@+id/rematchBtn"
+        android:layout_width="309dp"
+        android:layout_height="123dp"
+        android:background="@drawable/tictactoeneonv"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.858"
+        app:srcCompat="@drawable/rematch" />
 </androidx.constraintlayout.widget.ConstraintLayout>

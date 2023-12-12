@@ -4,5 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="violet">#AC3EEF</color>
     <color name="cyan">#17B498</color>
+    <color name="bettercyan">#17B498</color>
 
 </resources>
