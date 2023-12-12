@@ -66,4 +66,130 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.858"
         app:srcCompat="@drawable/rematch" />
+
+    <TextView
+        android:id="@+id/Wname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:shadowColor="@color/white"
+        android:text="[Winner's Name]"
+        android:textColor="@color/cyan"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/winningProf"
+        app:layout_constraintEnd_toEndOf="@+id/winningProf"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="@+id/winningProf"
+        app:layout_constraintTop_toTopOf="@+id/winningProf"
+        app:layout_constraintVertical_bias="0.289" />
+
+    <TextView
+        android:id="@+id/Wwinrate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:shadowColor="@color/white"
+        android:text="[Winner's Win Rate]"
+        android:textColor="@color/cyan"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/winningProf"
+        app:layout_constraintEnd_toEndOf="@+id/winningProf"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="@+id/winningProf"
+        app:layout_constraintTop_toTopOf="@+id/winningProf"
+        app:layout_constraintVertical_bias="0.423" />
+
+    <TextView
+        android:id="@+id/Wtotalmatches"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:shadowColor="@color/white"
+        android:text="[Winner's Total Matches]"
+        android:textColor="@color/cyan"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/winningProf"
+        app:layout_constraintEnd_toEndOf="@+id/winningProf"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="@+id/winningProf"
+        app:layout_constraintTop_toTopOf="@+id/winningProf"
+        app:layout_constraintVertical_bias="0.565" />
+
+    <TextView
+        android:id="@+id/Wrank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:shadowColor="@color/white"
+        android:text="[Winner's Rank]"
+        android:textColor="@color/cyan"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/winningProf"
+        app:layout_constraintEnd_toEndOf="@+id/winningProf"
+        app:layout_constraintStart_toStartOf="@+id/winningProf"
+        app:layout_constraintTop_toTopOf="@+id/winningProf"
+        app:layout_constraintVertical_bias="0.71" />
+
+    <TextView
+        android:id="@+id/Lname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:shadowColor="@color/white"
+        android:text="[Loser's Name]"
+        android:textColor="@color/cyan"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/losingProf"
+        app:layout_constraintEnd_toEndOf="@+id/losingProf"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="@+id/losingProf"
+        app:layout_constraintTop_toTopOf="@+id/losingProf"
+        app:layout_constraintVertical_bias="0.293" />
+
+    <TextView
+        android:id="@+id/Lwinrate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:shadowColor="@color/white"
+        android:text="[Loser's Win Rate]"
+        android:textColor="@color/cyan"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/losingProf"
+        app:layout_constraintEnd_toEndOf="@+id/losingProf"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="@+id/losingProf"
+        app:layout_constraintTop_toTopOf="@+id/losingProf"
+        app:layout_constraintVertical_bias="0.427" />
+
+    <TextView
+        android:id="@+id/Ltotalmatches"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:shadowColor="@color/white"
+        android:text="[Loser's Total Matches]"
+        android:textColor="@color/cyan"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/losingProf"
+        app:layout_constraintEnd_toEndOf="@+id/losingProf"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="@+id/losingProf"
+        app:layout_constraintTop_toTopOf="@+id/losingProf"
+        app:layout_constraintVertical_bias="0.559" />
+
+    <TextView
+        android:id="@+id/Lrank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:shadowColor="@color/white"
+        android:text="[Loser's Rank]"
+        android:textColor="@color/cyan"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/losingProf"
+        app:layout_constraintEnd_toEndOf="@+id/losingProf"
+        app:layout_constraintStart_toStartOf="@+id/losingProf"
+        app:layout_constraintTop_toTopOf="@+id/losingProf"
+        app:layout_constraintVertical_bias="0.702" />
 </androidx.constraintlayout.widget.ConstraintLayout>
