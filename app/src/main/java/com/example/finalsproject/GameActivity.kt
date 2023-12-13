@@ -1,9 +1,11 @@
 package com.example.finalsproject
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -33,6 +35,13 @@ class GameActivity : AppCompatActivity() {
     //'firstTurn' represents the player who goes first, 'currentTurn' represents the current player.
     private var firstTurn = PlayerTurn.CROSS
     private var currentTurn = PlayerTurn.CROSS
+    private var currentPlayer = firstTurn
+
+    private lateinit var playerOneTimer: CountDownTimer
+    private lateinit var playerTwoTimer: CountDownTimer
+
+    private val turnDurationInMillis: Long = 60000 // 1 minute in milliseconds
+    private val turnIntervalInMillis: Long = 1000 // 1 second in milliseconds
 
     private var cellStatusMap: MutableMap<Pair<Int, Int>, CellStatus> = mutableMapOf()
 
@@ -105,6 +114,11 @@ class GameActivity : AppCompatActivity() {
         binding.imageButton3.setOnClickListener {
             onBlockPowerUpButtonClick()
         }
+
+        initializeTimers()
+
+        // Start the initial player's turn
+        startPlayerTurn()
 
     }
 
@@ -340,6 +354,58 @@ class GameActivity : AppCompatActivity() {
         findViewById<View>(R.id.lineE).background = ContextCompat.getDrawable(this, lineDrawableResId)
 
     }
+
+    private fun initializeTimers() {
+        playerOneTimer = createTimer(turnDurationInMillis, turnIntervalInMillis) {
+            // Player One's turn has ended
+            switchTurn()
+            startPlayerTurn()
+        }
+
+        playerTwoTimer = createTimer(turnDurationInMillis, turnIntervalInMillis) {
+            // Player Two's turn has ended
+            switchTurn()
+            startPlayerTurn()
+        }
+    }
+
+    private fun createTimer(duration: Long, interval: Long, onFinish: () -> Unit): CountDownTimer {
+        return object : CountDownTimer(duration, interval) {
+            override fun onTick(millisUntilFinished: Long) {
+                // Update UI with remaining time if needed
+                updateTimerView(millisUntilFinished)
+            }
+
+            override fun onFinish() {
+                onFinish.invoke()
+            }
+        }
+    }
+
+    private fun updateTimerView(timeInMillis: Long) {
+        // Convert milliseconds to seconds for display
+        val seconds = timeInMillis / 1000
+        val minutes = seconds / 60
+        val remainingSeconds = seconds % 60
+
+        val timerText = String.format("%02d:%02d", minutes, remainingSeconds)
+
+        // Update the TextView
+        findViewById<TextView>(R.id.txtvTimerView).text = timerText
+
+    }
+
+    private fun startPlayerTurn() {
+        // Start the timer based on the current player
+        if (currentPlayer == PlayerTurn.NOUGHT) {
+            updateTimerView(turnDurationInMillis)
+            playerOneTimer.start()
+        } else {
+            updateTimerView(turnDurationInMillis)
+            playerTwoTimer.start()
+        }
+    }
+
 
     private fun onUndoPowerUpButtonClick() {
         // Check if the Undo power-up is available for the current player
