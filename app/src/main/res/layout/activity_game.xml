@@ -37,12 +37,14 @@
         app:layout_constraintVertical_bias="0.584">
 
         <View
+            android:id="@+id/lineA"
             style="@style/horizontalLine"
             android:background="@drawable/columnyellow" />
 
         <LinearLayout style="@style/row">
 
             <View
+                android:id="@+id/line1"
                 style="@style/verticalLine"
                 android:background="@drawable/columnyellow" />
 
@@ -52,6 +54,7 @@
                 android:background="@drawable/blankcell"/>
 
             <View
+                android:id="@+id/line2"
                 style="@style/verticalLine"
                 android:background="@drawable/columnyellow" />
 
@@ -61,6 +64,7 @@
                 android:background="@drawable/blankcell"/>
 
             <View
+                android:id="@+id/line3"
                 style="@style/verticalLine"
                 android:background="@drawable/columnyellow" />
 
@@ -70,6 +74,7 @@
                 android:background="@drawable/blankcell"/>
 
             <View
+                android:id="@+id/line4"
                 style="@style/verticalLine"
                 android:background="@drawable/columnyellow" />
 
@@ -79,18 +84,21 @@
                 android:background="@drawable/blankcell"/>
 
             <View
+                android:id="@+id/line5"
                 style="@style/verticalLine"
                 android:background="@drawable/columnyellow" />
 
         </LinearLayout>
 
         <View
+            android:id="@+id/lineB"
             style="@style/horizontalLine"
             android:background="@drawable/columnyellow" />
 
         <LinearLayout style="@style/row">
 
             <View
+                android:id="@+id/line6"
                 style="@style/verticalLine"
                 android:background="@drawable/columnyellow" />
 
@@ -100,6 +108,7 @@
                 android:background="@drawable/blankcell"/>
 
             <View
+                android:id="@+id/line7"
                 style="@style/verticalLine"
                 android:background="@drawable/columnyellow" />
 
@@ -109,6 +118,7 @@
                 android:background="@drawable/blankcell"/>
 
             <View
+                android:id="@+id/line8"
                 style="@style/verticalLine"
                 android:background="@drawable/columnyellow" />
 
@@ -118,6 +128,7 @@
                 android:background="@drawable/blankcell"/>
 
             <View
+                android:id="@+id/line9"
                 style="@style/verticalLine"
                 android:background="@drawable/columnyellow" />
 
@@ -127,18 +138,21 @@
                 android:background="@drawable/blankcell"/>
 
             <View
+                android:id="@+id/line10"
                 style="@style/verticalLine"
                 android:background="@drawable/columnyellow" />
 
         </LinearLayout>
 
         <View
+            android:id="@+id/lineC"
             style="@style/horizontalLine"
             android:background="@drawable/columnyellow" />
 
         <LinearLayout style="@style/row">
 
             <View
+                android:id="@+id/line11"
                 style="@style/verticalLine"
                 android:background="@drawable/columnyellow" />
 
@@ -148,6 +162,7 @@
                 android:background="@drawable/blankcell"/>
 
             <View
+                android:id="@+id/line12"
                 style="@style/verticalLine"
                 android:background="@drawable/columnyellow" />
 
@@ -157,6 +172,7 @@
                 android:background="@drawable/blankcell"/>
 
             <View
+                android:id="@+id/line13"
                 style="@style/verticalLine"
                 android:background="@drawable/columnyellow" />
 
@@ -166,6 +182,7 @@
                 android:background="@drawable/blankcell"/>
 
             <View
+                android:id="@+id/line14"
                 style="@style/verticalLine"
                 android:background="@drawable/columnyellow" />
 
@@ -175,18 +192,21 @@
                 android:background="@drawable/blankcell"/>
 
             <View
+                android:id="@+id/line15"
                 style="@style/verticalLine"
                 android:background="@drawable/columnyellow" />
 
         </LinearLayout>
 
         <View
+            android:id="@+id/lineD"
             style="@style/horizontalLine"
             android:background="@drawable/columnyellow" />
 
         <LinearLayout style="@style/row">
 
             <View
+                android:id="@+id/line16"
                 style="@style/verticalLine"
                 android:background="@drawable/columnyellow" />
 
@@ -196,6 +216,7 @@
                 android:background="@drawable/blankcell"/>
 
             <View
+                android:id="@+id/line17"
                 style="@style/verticalLine"
                 android:background="@drawable/columnyellow" />
 
@@ -205,6 +226,7 @@
                 android:background="@drawable/blankcell"/>
 
             <View
+                android:id="@+id/line18"
                 style="@style/verticalLine"
                 android:background="@drawable/columnyellow" />
 
@@ -214,6 +236,7 @@
                 android:background="@drawable/blankcell"/>
 
             <View
+                android:id="@+id/line19"
                 style="@style/verticalLine"
                 android:background="@drawable/columnyellow" />
 
@@ -223,12 +246,14 @@
                 android:background="@drawable/blankcell"/>
 
             <View
+                android:id="@+id/line20"
                 style="@style/verticalLine"
                 android:background="@drawable/columnyellow" />
 
         </LinearLayout>
 
         <View
+            android:id="@+id/lineE"
             style="@style/horizontalLine"
             android:background="@drawable/columnyellow" />
 

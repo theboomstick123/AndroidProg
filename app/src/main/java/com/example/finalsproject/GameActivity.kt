@@ -2,9 +2,12 @@ package com.example.finalsproject
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.finalsproject.databinding.ActivityGameBinding
 
 
@@ -17,8 +20,15 @@ class GameActivity : AppCompatActivity() {
     //Cell status map
     enum class CellStatus{
         EMPTY,
-        LOCKED
+        LOCKED,
+        BLOCKED
     }
+
+    private var row = -1
+    private var col = -1
+
+    private val maxBlockedTurns = 5
+    private val maxBlockerUsage = 1
 
     //'firstTurn' represents the player who goes first, 'currentTurn' represents the current player.
     private var firstTurn = PlayerTurn.CROSS
@@ -38,6 +48,17 @@ class GameActivity : AppCompatActivity() {
         PlayerTurn.NOUGHT to false,
         PlayerTurn.CROSS to false
     )
+    private var blockPowerUpUsedMap: MutableMap<PlayerTurn, Int> = mutableMapOf(
+        PlayerTurn.NOUGHT to 0,
+        PlayerTurn.CROSS to 0
+    )
+
+    private val cellLockingPlayerMap: MutableMap<Pair<Int, Int>, PlayerTurn> = mutableMapOf()
+    private val blockedCellTurnsMap: MutableMap<Pair<Int, Int>, Int> = mutableMapOf()
+    // Flag to store the cell where the "Blocker" power-up is placed
+    private var blockedCell: Pair<Int, Int>? = null
+
+
 
     // Variables to track the last move of each player
     private var lastMoveByNought: Move? = null
@@ -49,6 +70,8 @@ class GameActivity : AppCompatActivity() {
     private var clearPowerUpActivated = false
     // Flag to indicate if the "Undo" power-up is activated
     private var undoPowerUpActivated = false
+    // Flag to indicate if the "Undo" power-up is activated
+    private var blockPowerUpActivated = false
     // Add this variable to your class
     private var lastMoveUndone = false
 
@@ -76,6 +99,11 @@ class GameActivity : AppCompatActivity() {
         // Set click listener for the "Undo" power-up button
         binding.imageButton2.setOnClickListener {
             onUndoPowerUpButtonClick()
+        }
+
+        // Set click listener for the "Block" power-up button
+        binding.imageButton3.setOnClickListener {
+            onBlockPowerUpButtonClick()
         }
 
     }
@@ -150,6 +178,19 @@ class GameActivity : AppCompatActivity() {
             return
         }
 
+        // Check if the "Block" power-up is activated
+        if (blockPowerUpActivated) {
+            // Process "Block" power-up logic
+            blockPowerUp(imageView)
+
+            // Continue with the regular gameplay
+            continueRegularGameplay()
+
+            // Reset the "Block" power-up activation flag
+            blockPowerUpActivated = false
+            return
+        }
+
         if (!isCellEmpty(imageView))
             return
 
@@ -170,8 +211,6 @@ class GameActivity : AppCompatActivity() {
         if(fullBoard()){
             result("Draw")
         }
-
-        markCellAsUnlocked()
     }
 
     //ADDING SYMBOL TO THE BOARD:
@@ -190,8 +229,7 @@ class GameActivity : AppCompatActivity() {
         // Check if the cell is marked as locked
         if (cellStatusMap[Pair(row, col)] == CellStatus.LOCKED) {
             // Cell is locked, and Undo power-up is not activated, display a message or take appropriate action
-            if (!undoPowerUpActivated){
-                // Cell is locked, and Undo power-up is not activated, display a message or take appropriate action
+            if (undoPowerUpActivated){
                 AlertDialog.Builder(this)
                     .setTitle("Locked Cell")
                     .setMessage("You cannot place a symbol on this cell.")
@@ -202,6 +240,13 @@ class GameActivity : AppCompatActivity() {
                     .show()
                 return
             }
+        }
+
+        // Check if the cell is marked as blocked
+        if (cellStatusMap[Pair(row, col)] == CellStatus.BLOCKED) {
+            // Cell is blocked, display a message or take appropriate action
+            showToast("Cannot place symbol on a blocked cell.")
+            return
         }
 
         // Set the drawable (X or O) to the tapped ImageView
@@ -223,13 +268,77 @@ class GameActivity : AppCompatActivity() {
         // Switch turn after placing the symbol
         switchTurn()
 
-        // Mark the cell as locked to prevent placing the same move again
-        markCellAsLocked(row, col, true)
     }
 
     private fun switchTurn() {
+        // Check if the Undo power-up is activated and if the current player is the one who locked the cell
+        if (undoPowerUpActivated) {
+            Log.d("SwitchTurn", "Undo power-up activated.")
+
+            // Retrieve the locking player for the last move
+            val lockingPlayer = cellLockingPlayerMap[Pair(row, col)]
+
+            // Check if the cell is locked and the current player is the one who locked it
+            if (lockingPlayer == currentTurn) {
+                // Add logging
+                Log.d("SwitchTurn", "MarkCellAsUnlocked() triggered.")
+
+                // Mark the cell as unlocked after the opponent (Player A) makes a move
+                markCellAsUnlocked()
+
+                // Reset the last move undone flag
+                lastMoveUndone = false
+
+                // Reset activated flag
+                undoPowerUpActivated = false
+
+            } else {
+                Log.d("SwitchTurn", "Cell is not locked by the current player.")
+            }
+        } else {
+            Log.d("SwitchTurn", "Undo power-up not activated.")
+        }
+
+        // Decrement the remaining turns for each blocked cell
+        decrementBlockedCellTurns()
+
+        // Add logging
+        Log.d("SwitchTurn", "Next turn")
         currentTurn = if (currentTurn == PlayerTurn.NOUGHT) PlayerTurn.CROSS else PlayerTurn.NOUGHT
         setTurnLabel()
+
+        // Update the color of the grid lines based on the current player's turn
+        val lineDrawableResId = if (currentTurn == PlayerTurn.NOUGHT) R.drawable.columnblue else R.drawable.columnred
+
+        // Update background for vertical lines
+        findViewById<View>(R.id.line1).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.line2).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.line3).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.line4).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.line5).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.line6).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.line7).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.line8).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.line9).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.line10).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.line11).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.line12).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.line13).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.line14).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.line15).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.line16).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.line17).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.line18).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.line19).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.line20).background = ContextCompat.getDrawable(this, lineDrawableResId)
+
+        // Update background for horizontal lines
+        findViewById<View>(R.id.lineA).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.lineB).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.lineC).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.lineD).background = ContextCompat.getDrawable(this, lineDrawableResId)
+        findViewById<View>(R.id.lineE).background = ContextCompat.getDrawable(this, lineDrawableResId)
+
     }
 
     private fun onUndoPowerUpButtonClick() {
@@ -278,64 +387,51 @@ class GameActivity : AppCompatActivity() {
 
         if (lastMove != null) {
             // Clear the symbol in the selected cell
-            val imageView = boardList[lastMove.row * 4 + lastMove.col]
+            clearCellAt(lastMove.row, lastMove.col)
 
-            // Check if the cell is marked as locked
-            if (cellStatusMap[Pair(lastMove.row, lastMove.col)] == CellStatus.LOCKED) {
-                // Update the status to EMPTY
-                imageView.setImageResource(0)
-                cellStatusMap[Pair(lastMove.row, lastMove.col)] = CellStatus.EMPTY
+            // Mark the cell as locked to prevent placing the same move again
+            markCellAsLocked(lastMove.row, lastMove.col, true)
 
-                // Mark the cell as locked to prevent placing the same move again
-                markCellAsLocked(lastMove.row, lastMove.col, true)
-
-                // Print statements for debugging
-                println("UndoPowerUp Last Move: $lastMove")
-                println("UndoPowerUp Updated Board:")
-                printBoardState()
-
-                // Move switchTurn to the end of undoPowerUp to allow the opponent to make a move
-            } else {
-                // The cell was not locked, handle this case as needed
-                println("UndoPowerUp: Attempted to undo an unlocked cell.")
-            }
-
-            // Set the flag to indicate that the Undo power-up is inactive
-            undoPowerUpActivated = false
+            // Update the locking player information during the Undo operation
+            cellLockingPlayerMap[Pair(lastMove.row, lastMove.col)] = currentTurn
 
             // Set the flag to indicate that the last move was undone
             lastMoveUndone = true
 
-            // Switch turn after processing the undo
+            // Log the currentTurn before switching
+            Log.d("UndoPowerUp", "Current Turn before switch: $currentTurn")
+
+            // Switch the turn
             switchTurn()
+
+            // Log the currentTurn after switching
+            Log.d("UndoPowerUp", "Current Turn after switch: $currentTurn")
+
         } else {
             println("UndoPowerUp Last Move is null.")
         }
     }
 
-    private fun printBoardState() {
-        // Helper function to print the current state of the board for debugging
-        for (i in 0 until 4) {
-            for (j in 0 until 4) {
-                print("${boardList[i * 4 + j].drawable != null} ")
-            }
-            println()
-        }
-    }
-
-
     private data class Move(val row: Int, val col: Int, val player: PlayerTurn)
 
     private fun markCellAsLocked(row: Int, col: Int, lock: Boolean) {
-        // Implement logic to mark the cell as locked / unlocked for the specific player
+        // Implement logic to mark the cell as locked
         cellStatusMap[Pair(row, col)] = if (lock) CellStatus.LOCKED else CellStatus.EMPTY
+        // Store the locking player information
+        if (lock) {
+            cellLockingPlayerMap[Pair(row, col)] = currentTurn
+            Log.d("CellLocking", "Cell at ($row, $col) locked by ${currentTurn.name}")
+        } else {
+            cellLockingPlayerMap.remove(Pair(row, col))
+            Log.d("CellLocking", "Cell at ($row, $col) unlocked")
+        }
     }
 
     private fun markCellAsUnlocked() {
         // Iterate over all cells and unlock only those that were marked as locked by the current player
         for ((row, col) in cellStatusMap.keys) {
-            if (cellStatusMap[Pair(row, col)] == CellStatus.LOCKED && isCellLockedByCurrentPlayer(row, col)) {
-                // Unlock the cell only if it was marked as locked by the current player
+            if (cellStatusMap[Pair(row, col)] == CellStatus.LOCKED) {
+                // Unlock the cell
                 cellStatusMap[Pair(row, col)] = CellStatus.EMPTY
             }
         }
@@ -343,11 +439,96 @@ class GameActivity : AppCompatActivity() {
         lastMoveUndone = false
     }
 
-    private fun isCellLockedByCurrentPlayer(row: Int, col: Int): Boolean {
-        // Check if the cell was locked by the current player based on the last move undone
-        val lastMove = if (currentTurn == PlayerTurn.NOUGHT) lastMoveByCross else lastMoveByNought
-        return lastMove?.let { it.row == row && it.col == col } == true && !lastMoveUndone
+    private fun onBlockPowerUpButtonClick() {
+        // Check if the "Blocker" power-up is available for the current player
+        if (!blockPowerUpUsed()) {
+            // Display a dialog to ask the player if they want to use the "Blocker" power-up
+            AlertDialog.Builder(this)
+                .setTitle("Use Blocker Power-Up?")
+                .setPositiveButton("Yes") { _, _ ->
+
+                    // Set the flag to indicate that the "Blocker" power-up is activated
+                    blockPowerUpActivated = true
+
+                    // Update the power-up usage for the current player
+                    blockPowerUpUsedMap[currentTurn] = blockPowerUpUsedMap[currentTurn]!! + 1
+
+                }
+                .setNegativeButton("No") { _, _ ->
+                    // Do nothing if the player chooses not to use the power-up
+                }
+                .setCancelable(false)
+                .show()
+        } else {
+            // Display a message indicating that the "Blocker" power-up has already been used
+            AlertDialog.Builder(this)
+                .setTitle("Blocker Power-Up Already Used")
+                .setMessage("You have already used the Blocker power-up in this game.")
+                .setPositiveButton("OK") { _, _ ->
+                    // Do nothing or provide additional actions as needed
+                }
+                .setCancelable(false)
+                .show()
+        }
     }
+
+    private fun blockPowerUpUsed(): Boolean {
+        return blockPowerUpUsedMap[currentTurn]!! >= maxBlockerUsage
+    }
+
+    private fun blockPowerUp(imageView: ImageView) {
+        // Implement logic to mark the cell as blocked
+        val row = boardList.indexOf(imageView) / 4
+        val col = boardList.indexOf(imageView) % 4
+
+        // Check if the cell is already blocked or has a symbol
+        if (isCellEmpty(imageView) && cellStatusMap[Pair(row, col)] != CellStatus.BLOCKED) {
+            // Mark the cell as blocked
+            cellStatusMap[Pair(row, col)] = CellStatus.BLOCKED
+
+            // Set the background or update the cell appearance to indicate it is blocked
+            imageView.setBackgroundResource(R.drawable.powerupblock)
+
+            // Store the blocked cell information
+            blockedCell = Pair(row, col)
+
+            // Set the initial number of turns the cell is blocked
+            blockedCellTurnsMap[Pair(row, col)] = maxBlockedTurns // Set the desired number of turns
+
+            // Optionally, update the UI or take other actions as needed
+        } else {
+            // Handle the case where the cell is already blocked or has a symbol
+            // Display a message, show a toast, or take appropriate action
+            showToast("Cannot place Blocker Power-Up here.")
+        }
+    }
+
+    private fun decrementBlockedCellTurns() {
+        val iterator = blockedCellTurnsMap.iterator()
+        while (iterator.hasNext()) {
+            val (cell, remainingTurns) = iterator.next()
+            if (remainingTurns > 0) {
+                // Decrement the remaining turns
+                blockedCellTurnsMap[cell] = remainingTurns - 1
+            } else {
+                // Turns are zero, unblock the cell
+                unblockCell(cell.first, cell.second)
+                iterator.remove()
+            }
+        }
+    }
+
+    private fun unblockCell(row: Int, col: Int) {
+        // Implement logic to unblock the cell
+        cellStatusMap[Pair(row, col)] = CellStatus.EMPTY
+
+        // Update the cell appearance to indicate it is no longer blocked
+        val unblockedCell = boardList[row * 4 + col]
+        unblockedCell.setBackgroundResource(R.drawable.blankcell)
+
+        // Optionally, update the UI or take other actions as needed
+    }
+
 
     private fun onClearPowerUpButtonClick() {
         // Check if the "Clear" power-up is available for the current player
@@ -422,6 +603,8 @@ class GameActivity : AppCompatActivity() {
         clearPowerUpUsedMap[PlayerTurn.NOUGHT] = false
         undoPowerUpUsedMap[PlayerTurn.CROSS] = false
         undoPowerUpUsedMap[PlayerTurn.NOUGHT] = false
+        blockPowerUpUsedMap[PlayerTurn.CROSS] = 0
+        blockPowerUpUsedMap[PlayerTurn.NOUGHT] = 0
     }
 
     private fun continueRegularGameplay() {
@@ -533,6 +716,7 @@ class GameActivity : AppCompatActivity() {
         binding.txtvTurnView.text = turnText
     }
 
+
     //DISPLAY RESULT DIALOG:
 
     //This function displays a dialog with the result of the game (win, draw).
@@ -585,5 +769,10 @@ class GameActivity : AppCompatActivity() {
 
     private fun clearCellStatus() {
         cellStatusMap.clear()
+    }
+
+    // Helper function to show toast messages
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
