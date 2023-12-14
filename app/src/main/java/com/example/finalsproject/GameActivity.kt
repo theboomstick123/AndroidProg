@@ -284,11 +284,34 @@ class GameActivity : AppCompatActivity() {
 
     }
 
+    private fun updateLineBackground(lineIds: List<Int>, drawableResId: Int) {
+        for (lineId in lineIds) {
+            findViewById<View>(lineId).background = ContextCompat.getDrawable(this, drawableResId)
+        }
+    }
+
+    private fun updateGridLines() {
+        // Update background for vertical lines
+        val verticalLineIds = listOf(
+            R.id.line1, R.id.line2, R.id.line3, R.id.line4, R.id.line5,
+            R.id.line6, R.id.line7, R.id.line8, R.id.line9, R.id.line10,
+            R.id.line11, R.id.line12, R.id.line13, R.id.line14, R.id.line15,
+            R.id.line16, R.id.line17, R.id.line18, R.id.line19, R.id.line20
+        )
+
+        // Update background for horizontal lines
+        val horizontalLineIds = listOf(R.id.lineA, R.id.lineB, R.id.lineC, R.id.lineD, R.id.lineE)
+
+        val lineDrawableResId = if (currentTurn == PlayerTurn.NOUGHT) R.drawable.columnblue else R.drawable.columnred
+        val lineDrawableResIdV = if (currentTurn == PlayerTurn.NOUGHT) R.drawable.verticalblue else R.drawable.verticalred
+
+        updateLineBackground(verticalLineIds, lineDrawableResIdV)
+        updateLineBackground(horizontalLineIds, lineDrawableResId)
+    }
+
     private fun switchTurn() {
         // Check if the Undo power-up is activated and if the current player is the one who locked the cell
         if (undoPowerUpActivated) {
-            Log.d("SwitchTurn", "Undo power-up activated.")
-
             // Retrieve the locking player for the last move
             val lockingPlayer = cellLockingPlayerMap[Pair(row, col)]
 
@@ -322,38 +345,9 @@ class GameActivity : AppCompatActivity() {
         setTurnLabel()
 
         // Update the color of the grid lines based on the current player's turn
-        val lineDrawableResId = if (currentTurn == PlayerTurn.NOUGHT) R.drawable.columnblue else R.drawable.columnred
-
-        // Update background for vertical lines
-        findViewById<View>(R.id.line1).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.line2).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.line3).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.line4).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.line5).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.line6).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.line7).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.line8).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.line9).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.line10).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.line11).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.line12).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.line13).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.line14).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.line15).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.line16).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.line17).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.line18).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.line19).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.line20).background = ContextCompat.getDrawable(this, lineDrawableResId)
-
-        // Update background for horizontal lines
-        findViewById<View>(R.id.lineA).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.lineB).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.lineC).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.lineD).background = ContextCompat.getDrawable(this, lineDrawableResId)
-        findViewById<View>(R.id.lineE).background = ContextCompat.getDrawable(this, lineDrawableResId)
-
+        updateGridLines()
     }
+
 
     private fun initializeTimers() {
         playerOneTimer = createTimer(turnDurationInMillis, turnIntervalInMillis) {
