@@ -1,5 +1,4 @@
 package com.example.finalsproject
-
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
@@ -12,8 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.finalsproject.databinding.ActivityGameBinding
 
-
 class GameActivity : AppCompatActivity() {
+
     enum class PlayerTurn{
         NOUGHT,
         CROSS
@@ -35,13 +34,12 @@ class GameActivity : AppCompatActivity() {
     //'firstTurn' represents the player who goes first, 'currentTurn' represents the current player.
     private var firstTurn = PlayerTurn.CROSS
     private var currentTurn = PlayerTurn.CROSS
-    private var currentPlayer = firstTurn
 
-    private lateinit var playerOneTimer: CountDownTimer
-    private lateinit var playerTwoTimer: CountDownTimer
+    private var totalGameTimeMillis: Long = 60000 // 1 minute in milliseconds
+    private var currentPlayerTimer: CountDownTimer? = null
+    private var opponentPlayerTimer: CountDownTimer? = null
+    private lateinit var timerView: TextView
 
-    private val turnDurationInMillis: Long = 60000 // 1 minute in milliseconds
-    private val turnIntervalInMillis: Long = 1000 // 1 second in milliseconds
 
     private var cellStatusMap: MutableMap<Pair<Int, Int>, CellStatus> = mutableMapOf()
 
@@ -85,6 +83,7 @@ class GameActivity : AppCompatActivity() {
     private var lastMoveUndone = false
 
     private lateinit var binding : ActivityGameBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -101,6 +100,9 @@ class GameActivity : AppCompatActivity() {
         initBoard()
         Log.d("GameActivity", "initBoard() called")
 
+        // Initialize timers
+        initializeTimers()
+
         // Set click listener for the "Clear" power-up button
         binding.imageButton1.setOnClickListener {
             onClearPowerUpButtonClick()
@@ -115,10 +117,8 @@ class GameActivity : AppCompatActivity() {
             onBlockPowerUpButtonClick()
         }
 
-        initializeTimers()
+        timerView = findViewById(R.id.txtvTimerView) // Replace with the actual ID of your TextView
 
-        // Start the initial player's turn
-        startPlayerTurn()
 
     }
 
@@ -272,6 +272,9 @@ class GameActivity : AppCompatActivity() {
         // Update the background to remove the blank cell appearance
         imageView.setBackgroundResource(0)
 
+        // Stop the current player's timer
+        currentPlayerTimer?.cancel()
+
         // Update the last move for the current player
         if (currentTurn == PlayerTurn.NOUGHT) {
             lastMoveByNought = Move(row, col, PlayerTurn.NOUGHT)
@@ -310,6 +313,9 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun switchTurn() {
+        // Pause the current player's timer
+        currentPlayerTimer?.cancel()
+
         // Check if the Undo power-up is activated and if the current player is the one who locked the cell
         if (undoPowerUpActivated) {
             // Retrieve the locking player for the last move
@@ -339,66 +345,51 @@ class GameActivity : AppCompatActivity() {
         // Decrement the remaining turns for each blocked cell
         decrementBlockedCellTurns()
 
+        //Switch Turns
         // Add logging
         Log.d("SwitchTurn", "Next turn")
         currentTurn = if (currentTurn == PlayerTurn.NOUGHT) PlayerTurn.CROSS else PlayerTurn.NOUGHT
         setTurnLabel()
-
         // Update the color of the grid lines based on the current player's turn
         updateGridLines()
-    }
 
+        initializeTimers() // Initialize and start the timer for the current player
+    }
 
     private fun initializeTimers() {
-        playerOneTimer = createTimer(turnDurationInMillis, turnIntervalInMillis) {
-            // Player One's turn has ended
-            switchTurn()
-            startPlayerTurn()
-        }
+        currentPlayerTimer = createTimer(totalGameTimeMillis, currentTurn)
+        currentPlayerTimer?.start()
 
-        playerTwoTimer = createTimer(turnDurationInMillis, turnIntervalInMillis) {
-            // Player Two's turn has ended
-            switchTurn()
-            startPlayerTurn()
-        }
+        opponentPlayerTimer?.cancel()
+        opponentPlayerTimer = null
     }
 
-    private fun createTimer(duration: Long, interval: Long, onFinish: () -> Unit): CountDownTimer {
-        return object : CountDownTimer(duration, interval) {
+    private fun createTimer(initialMillis: Long, player: PlayerTurn): CountDownTimer {
+        return object : CountDownTimer(initialMillis, 100) {
             override fun onTick(millisUntilFinished: Long) {
-                // Update UI with remaining time if needed
-                updateTimerView(millisUntilFinished)
+                // Update UI with remaining time
+                timerView.text = formatTime(millisUntilFinished)
             }
 
             override fun onFinish() {
-                onFinish.invoke()
+                // Player loses when the timer reaches zero
+                result("${player.name} ran out of time. ${opponentPlayer(player).name} wins!")
             }
         }
     }
 
-    private fun updateTimerView(timeInMillis: Long) {
-        // Convert milliseconds to seconds for display
-        val seconds = timeInMillis / 1000
-        val minutes = seconds / 60
-        val remainingSeconds = seconds % 60
-
-        val timerText = String.format("%02d:%02d", minutes, remainingSeconds)
-
-        // Update the TextView
-        findViewById<TextView>(R.id.txtvTimerView).text = timerText
-
+    private fun formatTime(millis: Long): String {
+        val seconds = millis / 1000
+        val milliseconds = millis % 1000
+        return String.format("%02d.%02d", seconds, milliseconds / 10)
     }
 
-    private fun startPlayerTurn() {
-        // Start the timer based on the current player
-        if (currentPlayer == PlayerTurn.NOUGHT) {
-            updateTimerView(turnDurationInMillis)
-            playerOneTimer.start()
-        } else {
-            updateTimerView(turnDurationInMillis)
-            playerTwoTimer.start()
-        }
+    private fun opponentPlayer(player: PlayerTurn): PlayerTurn {
+        return if (player == PlayerTurn.CROSS) PlayerTurn.NOUGHT else PlayerTurn.CROSS
     }
+
+
+
 
 
     private fun onUndoPowerUpButtonClick() {
@@ -782,6 +773,9 @@ class GameActivity : AppCompatActivity() {
     //This function displays a dialog with the result of the game (win, draw).
     //The "Reset" button in the dialog calls the resetBoard() function.
     private fun result(title: String) {
+        currentPlayerTimer?.cancel()
+        opponentPlayerTimer?.cancel()
+
         AlertDialog.Builder(this)
             .setTitle(title)
             .setPositiveButton("Reset"){
@@ -807,6 +801,9 @@ class GameActivity : AppCompatActivity() {
             // Set the background to the blank cell
             imageView.setBackgroundResource(R.drawable.blankcell)
         }
+
+        //Reset timers
+        initializeTimers()
 
         //Clear cell stats for both players
         clearCellStatus()
