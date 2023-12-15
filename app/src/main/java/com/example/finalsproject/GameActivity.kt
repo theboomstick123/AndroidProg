@@ -28,14 +28,14 @@ class GameActivity : AppCompatActivity() {
     private var row = -1
     private var col = -1
 
-    private val maxBlockedTurns = 5
+    private val maxBlockedTurns = 3
     private val maxBlockerUsage = 1
 
     //'firstTurn' represents the player who goes first, 'currentTurn' represents the current player.
     private var firstTurn = PlayerTurn.CROSS
     private var currentTurn = PlayerTurn.CROSS
 
-    private var totalGameTimeMillis: Long = 45000 // in milliseconds
+    private var totalGameTimeMillis: Long = 60000 // in milliseconds
     private var currentPlayerTimer: CountDownTimer? = null
     private var opponentPlayerTimer: CountDownTimer? = null
     private var crossPlayerRemainingTime: Long = totalGameTimeMillis
