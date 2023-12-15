@@ -35,7 +35,7 @@ class GameActivity : AppCompatActivity() {
     private var firstTurn = PlayerTurn.CROSS
     private var currentTurn = PlayerTurn.CROSS
 
-    private var totalGameTimeMillis: Long = 45000 // 1 minute in milliseconds
+    private var totalGameTimeMillis: Long = 45000 // in milliseconds
     private var currentPlayerTimer: CountDownTimer? = null
     private var opponentPlayerTimer: CountDownTimer? = null
     private var crossPlayerRemainingTime: Long = totalGameTimeMillis
@@ -245,8 +245,7 @@ class GameActivity : AppCompatActivity() {
 
         // Check if the cell is marked as locked
         if (cellStatusMap[Pair(row, col)] == CellStatus.LOCKED) {
-            // Cell is locked, and Undo power-up is not activated, display a message or take appropriate action
-            if (undoPowerUpActivated){
+            // Cell is locked, display a message or take appropriate action
                 AlertDialog.Builder(this)
                     .setTitle("Locked Cell")
                     .setMessage("You cannot place a symbol on this cell.")
@@ -256,7 +255,6 @@ class GameActivity : AppCompatActivity() {
                     .setCancelable(false)
                     .show()
                 return
-            }
         }
 
         // Check if the cell is marked as blocked
@@ -330,7 +328,7 @@ class GameActivity : AppCompatActivity() {
                 Log.d("SwitchTurn", "MarkCellAsUnlocked() triggered.")
 
                 // Mark the cell as unlocked after the opponent (Player A) makes a move
-                markCellAsUnlocked()
+                markCellAsUnlocked(row, col)
 
                 // Reset the last move undone flag
                 lastMoveUndone = false
@@ -344,6 +342,9 @@ class GameActivity : AppCompatActivity() {
         } else {
             Log.d("SwitchTurn", "Undo power-up not activated.")
         }
+
+        // Reset activated flag
+        undoPowerUpActivated = false
 
         // Decrement the remaining turns for each blocked cell
         decrementBlockedCellTurns()
@@ -493,13 +494,14 @@ class GameActivity : AppCompatActivity() {
         if (lock) {
             cellLockingPlayerMap[Pair(row, col)] = currentTurn
             Log.d("CellLocking", "Cell at ($row, $col) locked by ${currentTurn.name}")
+
         } else {
             cellLockingPlayerMap.remove(Pair(row, col))
             Log.d("CellLocking", "Cell at ($row, $col) unlocked")
         }
     }
 
-    private fun markCellAsUnlocked() {
+    private fun markCellAsUnlocked(row: Int, col: Int) {
         // Iterate over all cells and unlock only those that were marked as locked by the current player
         for ((row, col) in cellStatusMap.keys) {
             if (cellStatusMap[Pair(row, col)] == CellStatus.LOCKED) {
@@ -648,12 +650,14 @@ class GameActivity : AppCompatActivity() {
         for (i in row - 1..row + 1) {
             if (i in 0 until 4) {
                 clearCellAt(i, col)
+                markCellAsUnlocked(i, col)  // Unlock the cell
             }
         }
 
         for (j in col - 1..col + 1) {
             if (j in 0 until 4 && j != col) {
                 clearCellAt(row, j)
+                markCellAsUnlocked(row, j)  // Unlock the cell
             }
         }
     }
@@ -665,8 +669,16 @@ class GameActivity : AppCompatActivity() {
         imageView.setImageDrawable(null)
         // Clear all tags
         imageView.tag = ""
+
+        if (clearPowerUpActivated) {
+            imageView.setBackgroundResource(R.drawable.powerupdestroy)
+        }
         // Set the background to the blank cell
         imageView.setBackgroundResource(R.drawable.blankcell)
+
+        if (undoPowerUpActivated) {
+            imageView.setBackgroundResource(R.drawable.powerupundo)
+        }
     }
 
     private fun refreshPowerUpUsage() {
