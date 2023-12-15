@@ -128,12 +128,12 @@
         app:layout_constraintVertical_bias="0.4" />
 
     <TextView
-        android:id="@+id/txttotalmatches"
+        android:id="@+id/txtwinsandloss"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:shadowColor="@color/white"
-        android:text="[Total Matches]"
+        android:text="[Wins and Losses]"
         android:textColor="@color/cyan"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/imgVProf1"
@@ -142,22 +142,6 @@
         app:layout_constraintStart_toStartOf="@+id/imgVProf1"
         app:layout_constraintTop_toTopOf="@+id/imgVProf1"
         app:layout_constraintVertical_bias="0.559" />
-
-    <TextView
-        android:id="@+id/txtrank"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
-        android:shadowColor="@color/white"
-        android:text="[Rank]"
-        android:textColor="@color/cyan"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imgVProf1"
-        app:layout_constraintEnd_toEndOf="@+id/imgVProf1"
-        app:layout_constraintHorizontal_bias="0.506"
-        app:layout_constraintStart_toStartOf="@+id/imgVProf1"
-        app:layout_constraintTop_toTopOf="@+id/imgVProf1"
-        app:layout_constraintVertical_bias="0.718" />
 
     <TextView
         android:id="@+id/txtprofile2"
@@ -192,12 +176,12 @@
         app:layout_constraintVertical_bias="0.39" />
 
     <TextView
-        android:id="@+id/txttotalmatches2"
+        android:id="@+id/txtwinsandloss2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:shadowColor="@color/white"
-        android:text="[Total Matches2]"
+        android:text="[Wins and Losses]"
         android:textColor="@color/cyan"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/imgVProf2"
@@ -206,21 +190,5 @@
         app:layout_constraintStart_toStartOf="@+id/imgVProf2"
         app:layout_constraintTop_toTopOf="@+id/imgVProf2"
         app:layout_constraintVertical_bias="0.559" />
-
-    <TextView
-        android:id="@+id/txtrank2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
-        android:shadowColor="@color/white"
-        android:text="[Rank2]"
-        android:textColor="@color/cyan"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imgVProf2"
-        app:layout_constraintEnd_toEndOf="@+id/imgVProf2"
-        app:layout_constraintHorizontal_bias="0.508"
-        app:layout_constraintStart_toStartOf="@+id/imgVProf2"
-        app:layout_constraintTop_toTopOf="@+id/imgVProf2"
-        app:layout_constraintVertical_bias="0.736" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

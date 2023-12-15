@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-class ProfileAdapter(private val onItemClick: (Profiles) -> Unit) :
-    ListAdapter<Profiles, ProfileAdapter.ProfileViewHolder>(ProfileDiffCallback()) {
+class ProfileAdapter(
+    private val onItemClick: (Profiles) -> Unit,
+    private val onPlayerSelect: (Profiles) -> Unit
+) : ListAdapter<Profiles, ProfileAdapter.ProfileViewHolder>(ProfileDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -21,6 +23,11 @@ class ProfileAdapter(private val onItemClick: (Profiles) -> Unit) :
 
         holder.itemView.setOnClickListener {
             onItemClick(profile)
+        }
+
+        holder.itemView.setOnLongClickListener {
+            onPlayerSelect(profile)
+            true
         }
 
         holder.bind(profile)

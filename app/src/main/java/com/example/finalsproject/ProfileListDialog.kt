@@ -19,11 +19,21 @@ class ProfileListDialog : DialogFragment() {
         val view = inflater.inflate(R.layout.dialog_recyclerview_layout, null)
 
         recyclerView = view.findViewById(R.id.recyclerView)
-        profileAdapter = ProfileAdapter { profile ->
-            // Handle the click event
-            //Log the clicked profile's username
-            Log.d("ProfileClick", "Clicked on profile: ${profile.userName}")
-        }
+        profileAdapter = ProfileAdapter(
+            onItemClick = { profile ->
+                // Handle the click event, e.g., show details
+                Log.d("ProfileClick", "Clicked on profile: ${profile.userName}")
+            },
+            onPlayerSelect = { profile ->
+                // Handle the long click event, e.g., select as Player 1 or Player 2
+                Log.d("PlayerSelect", "Selected as Player: ${profile.userName}")
+
+                // Pass the selected profile to the activity (you can use an interface or callback)
+                if (activity is ProfileSelectionListener) {
+                    (activity as ProfileSelectionListener).onProfileSelected(profile)
+                }
+            }
+        )
 
         // Initialize Firebase
         dbReference = FirebaseDatabase.getInstance().getReference("users")
@@ -54,5 +64,9 @@ class ProfileListDialog : DialogFragment() {
             setContentView(view)
             setTitle("Profile List")
         }
+    }
+
+    interface ProfileSelectionListener {
+        fun onProfileSelected(profile: Profiles)
     }
 }
