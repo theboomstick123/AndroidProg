@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,9 +13,9 @@ class MainActivity : AppCompatActivity() {
 
         // Button click listener
 
-        val button = findViewById<Button>(R.id.btnGameLink)
+        val button = findViewById<ImageButton>(R.id.startBTN)
         button.setOnClickListener {
-            val intent = Intent(this, GameActivity::class.java)
+            val intent = Intent(this, ProfileInterface::class.java)
             startActivity(intent)
         }
     }
