@@ -38,6 +38,9 @@ class GameActivity : AppCompatActivity() {
     private var totalGameTimeMillis: Long = 60000 // 1 minute in milliseconds
     private var currentPlayerTimer: CountDownTimer? = null
     private var opponentPlayerTimer: CountDownTimer? = null
+    private var crossPlayerRemainingTime: Long = totalGameTimeMillis
+    private var noughtPlayerRemainingTime: Long = totalGameTimeMillis
+
     private lateinit var timerView: TextView
 
 
@@ -353,11 +356,22 @@ class GameActivity : AppCompatActivity() {
         // Update the color of the grid lines based on the current player's turn
         updateGridLines()
 
-        initializeTimers() // Initialize and start the timer for the current player
+        // Initialize timers for the new turn with the remaining time of the current player
+        initializeTimers()
     }
 
     private fun initializeTimers() {
-        currentPlayerTimer = createTimer(totalGameTimeMillis, currentTurn)
+        currentPlayerTimer?.cancel() // Stop the previous player's timer
+
+        // Deduct the remaining time of the previous player from the total game time
+        val remainingTimeMillis = if (currentTurn == PlayerTurn.CROSS) {
+            crossPlayerRemainingTime
+        } else {
+            noughtPlayerRemainingTime
+        }
+
+        // Create a timer for the current player with the deducted remaining time
+        currentPlayerTimer = createTimer(remainingTimeMillis, currentTurn)
         currentPlayerTimer?.start()
 
         opponentPlayerTimer?.cancel()
@@ -369,6 +383,13 @@ class GameActivity : AppCompatActivity() {
             override fun onTick(millisUntilFinished: Long) {
                 // Update UI with remaining time
                 timerView.text = formatTime(millisUntilFinished)
+
+                // Update remaining time for the current player
+                if (player == PlayerTurn.CROSS) {
+                    crossPlayerRemainingTime = millisUntilFinished
+                } else {
+                    noughtPlayerRemainingTime = millisUntilFinished
+                }
             }
 
             override fun onFinish() {
@@ -802,8 +823,20 @@ class GameActivity : AppCompatActivity() {
             imageView.setBackgroundResource(R.drawable.blankcell)
         }
 
-        //Reset timers
-        initializeTimers()
+        // Reset the remaining time for each player
+        crossPlayerRemainingTime = totalGameTimeMillis
+        noughtPlayerRemainingTime = totalGameTimeMillis
+
+        // Cancel and reset the timers
+        currentPlayerTimer?.cancel()
+        currentPlayerTimer = createTimer(crossPlayerRemainingTime, currentTurn)
+        currentPlayerTimer?.start()
+
+        opponentPlayerTimer?.cancel()
+        opponentPlayerTimer = null
+
+        // Update UI with initial time
+        timerView.text = formatTime(totalGameTimeMillis)
 
         //Clear cell stats for both players
         clearCellStatus()
