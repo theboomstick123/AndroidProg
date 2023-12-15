@@ -13,6 +13,18 @@ class ProfileInterface : AppCompatActivity(), ProfileListDialog.ProfileSelection
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_interface)
 
+        val buttonply = findViewById<ImageButton>(R.id.imgBtnplay)
+        buttonply.setOnClickListener {
+            val intent = Intent(this, GameActivity::class.java)
+            startActivity(intent)
+        }
+
+        val buttonbck = findViewById<ImageButton>(R.id.imgbtnBACK)
+        buttonbck.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
         val btnDOTs = findViewById<ImageButton>(R.id.imgbtnDOTs)
         val profileListDialog = ProfileListDialog()
         btnDOTs.setOnClickListener {
