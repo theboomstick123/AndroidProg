@@ -13,14 +13,15 @@
         android:id="@+id/txtvTurnView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="Tic Tac Twist"
         android:textColor="@color/bettercyan"
         android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/txtvTimerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtvTimerView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -301,14 +302,15 @@
         android:id="@+id/txtvTimerView"
         android:layout_width="108dp"
         android:layout_height="68dp"
-        android:layout_marginTop="32dp"
         android:text="60"
         android:textColor="@color/bettercyan"
         android:textSize="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.773" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

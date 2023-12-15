@@ -13,9 +13,9 @@ class MainActivity : AppCompatActivity() {
 
         // Button click listener
 
-        val button = findViewById<Button>(R.id.btnGameLink)
+        val button = findViewById<ImageButton>(R.id.startBTN)
         button.setOnClickListener {
-            val intent = Intent(this, GameActivity::class.java)
+            val intent = Intent(this, ProfileInterface::class.java)
             startActivity(intent)
         }
 
