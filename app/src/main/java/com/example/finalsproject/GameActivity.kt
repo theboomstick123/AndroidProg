@@ -35,7 +35,7 @@ class GameActivity : AppCompatActivity() {
     private var firstTurn = PlayerTurn.CROSS
     private var currentTurn = PlayerTurn.CROSS
 
-    private var totalGameTimeMillis: Long = 60000 // 1 minute in milliseconds
+    private var totalGameTimeMillis: Long = 45000 // 1 minute in milliseconds
     private var currentPlayerTimer: CountDownTimer? = null
     private var opponentPlayerTimer: CountDownTimer? = null
     private var crossPlayerRemainingTime: Long = totalGameTimeMillis
