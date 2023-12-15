@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "607017452947",
+    "project_id": "tictactwistdb-31069",
+    "storage_bucket": "tictactwistdb-31069.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:607017452947:android:6438ee502c2acfd7769466",
+        "android_client_info": {
+          "package_name": "com.example.finalsproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfVGAcbTroVqfECLGdULYe12syH1YOerA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
