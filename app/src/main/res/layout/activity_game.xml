@@ -46,7 +46,7 @@
             <View
                 android:id="@+id/line1"
                 style="@style/verticalLine"
-                android:background="@drawable/columnyellow" />
+                android:background="@drawable/verticalyellow" />
 
             <ImageView
                 android:id="@+id/a1"
@@ -56,7 +56,7 @@
             <View
                 android:id="@+id/line2"
                 style="@style/verticalLine"
-                android:background="@drawable/columnyellow" />
+                android:background="@drawable/verticalyellow" />
 
             <ImageView
                 android:id="@+id/b1"
@@ -66,7 +66,7 @@
             <View
                 android:id="@+id/line3"
                 style="@style/verticalLine"
-                android:background="@drawable/columnyellow" />
+                android:background="@drawable/verticalyellow" />
 
             <ImageView
                 android:id="@+id/c1"
@@ -76,7 +76,7 @@
             <View
                 android:id="@+id/line4"
                 style="@style/verticalLine"
-                android:background="@drawable/columnyellow" />
+                android:background="@drawable/verticalyellow" />
 
             <ImageView
                 android:id="@+id/d1"
@@ -86,7 +86,7 @@
             <View
                 android:id="@+id/line5"
                 style="@style/verticalLine"
-                android:background="@drawable/columnyellow" />
+                android:background="@drawable/verticalyellow" />
 
         </LinearLayout>
 
@@ -100,7 +100,7 @@
             <View
                 android:id="@+id/line6"
                 style="@style/verticalLine"
-                android:background="@drawable/columnyellow" />
+                android:background="@drawable/verticalyellow" />
 
             <ImageView
                 android:id="@+id/a2"
@@ -110,7 +110,7 @@
             <View
                 android:id="@+id/line7"
                 style="@style/verticalLine"
-                android:background="@drawable/columnyellow" />
+                android:background="@drawable/verticalyellow" />
 
             <ImageView
                 android:id="@+id/b2"
@@ -120,7 +120,7 @@
             <View
                 android:id="@+id/line8"
                 style="@style/verticalLine"
-                android:background="@drawable/columnyellow" />
+                android:background="@drawable/verticalyellow" />
 
             <ImageView
                 android:id="@+id/c2"
@@ -130,7 +130,7 @@
             <View
                 android:id="@+id/line9"
                 style="@style/verticalLine"
-                android:background="@drawable/columnyellow" />
+                android:background="@drawable/verticalyellow" />
 
             <ImageView
                 android:id="@+id/d2"
@@ -140,7 +140,7 @@
             <View
                 android:id="@+id/line10"
                 style="@style/verticalLine"
-                android:background="@drawable/columnyellow" />
+                android:background="@drawable/verticalyellow" />
 
         </LinearLayout>
 
@@ -154,7 +154,7 @@
             <View
                 android:id="@+id/line11"
                 style="@style/verticalLine"
-                android:background="@drawable/columnyellow" />
+                android:background="@drawable/verticalyellow" />
 
             <ImageView
                 android:id="@+id/a3"
@@ -164,7 +164,7 @@
             <View
                 android:id="@+id/line12"
                 style="@style/verticalLine"
-                android:background="@drawable/columnyellow" />
+                android:background="@drawable/verticalyellow" />
 
             <ImageView
                 android:id="@+id/b3"
@@ -174,7 +174,7 @@
             <View
                 android:id="@+id/line13"
                 style="@style/verticalLine"
-                android:background="@drawable/columnyellow" />
+                android:background="@drawable/verticalyellow" />
 
             <ImageView
                 android:id="@+id/c3"
@@ -184,7 +184,7 @@
             <View
                 android:id="@+id/line14"
                 style="@style/verticalLine"
-                android:background="@drawable/columnyellow" />
+                android:background="@drawable/verticalyellow" />
 
             <ImageView
                 android:id="@+id/d3"
@@ -194,7 +194,7 @@
             <View
                 android:id="@+id/line15"
                 style="@style/verticalLine"
-                android:background="@drawable/columnyellow" />
+                android:background="@drawable/verticalyellow" />
 
         </LinearLayout>
 
@@ -208,7 +208,7 @@
             <View
                 android:id="@+id/line16"
                 style="@style/verticalLine"
-                android:background="@drawable/columnyellow" />
+                android:background="@drawable/verticalyellow" />
 
             <ImageView
                 android:id="@+id/a4"
@@ -218,7 +218,7 @@
             <View
                 android:id="@+id/line17"
                 style="@style/verticalLine"
-                android:background="@drawable/columnyellow" />
+                android:background="@drawable/verticalyellow" />
 
             <ImageView
                 android:id="@+id/b4"
@@ -228,7 +228,7 @@
             <View
                 android:id="@+id/line18"
                 style="@style/verticalLine"
-                android:background="@drawable/columnyellow" />
+                android:background="@drawable/verticalyellow" />
 
             <ImageView
                 android:id="@+id/c4"
@@ -238,7 +238,7 @@
             <View
                 android:id="@+id/line19"
                 style="@style/verticalLine"
-                android:background="@drawable/columnyellow" />
+                android:background="@drawable/verticalyellow" />
 
             <ImageView
                 android:id="@+id/d4"
@@ -248,7 +248,7 @@
             <View
                 android:id="@+id/line20"
                 style="@style/verticalLine"
-                android:background="@drawable/columnyellow" />
+                android:background="@drawable/verticalyellow" />
 
         </LinearLayout>
 
